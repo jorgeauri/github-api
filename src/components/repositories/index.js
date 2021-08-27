@@ -1,4 +1,5 @@
 import React from 'react'
+import RepositoryItem from '..';
 import * as S from "./styled";
 
 const Repositories = () => {
@@ -11,8 +12,20 @@ const Repositories = () => {
           <S.WrapperTab>Repositories</S.WrapperTab>
           <S.WrapperTab>Starred</S.WrapperTab>
         </S.WrapperTabList>
-        <S.WrapperTabPanel>panel Repositories</S.WrapperTabPanel>
-        <S.WrapperTabPanel>panel Starred</S.WrapperTabPanel>
+        <S.WrapperTabPanel>
+          <RepositoryItem 
+            name="github-api"
+            linkToRepo="https://github.com/jorgeauri/github-api"
+            fullName="jorgeauri/github-api"
+          />
+          </S.WrapperTabPanel>
+        <S.WrapperTabPanel>
+          <RepositoryItem
+          name="helixGame"
+          linkToRepo="https://github.com/jorgeauri/helixGame"
+          fullName="jorgeauri/helixGame"
+          />
+          </S.WrapperTabPanel>
     </S.WrapperTabs>
     );
 };
