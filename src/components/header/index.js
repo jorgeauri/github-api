@@ -11,6 +11,13 @@ const Header = () => {
     return getUser(usernameForSearch);
   };
 
+  const submitGetUserKey = (event) => {
+    if (event.keyCode === 13) {
+      if (!usernameForSearch) return;
+      return getUser(usernameForSearch);
+    }
+  };
+
   return (
     <header>
       <S.Wrapper>
@@ -18,6 +25,7 @@ const Header = () => {
           type="text"
           placeholder="Digite o username para pesquisa..."
           onChange={(event) => setUsernameForSearch(event.target.value)}
+          onKeyDown={submitGetUserKey}
         />
         <button type="submit" onClick={submitGetUser}>
           <span>Buscar</span>
