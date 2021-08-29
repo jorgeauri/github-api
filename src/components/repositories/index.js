@@ -1,33 +1,63 @@
-import React from 'react'
-import RepositoryItem from '..';
-import * as S from "./styled";
+import React, { useEffect, useState } from 'react';
+import RepositoryItem from '../repository-item';
+import useGithub from '../../hooks/github-hooks';
+import * as S from './styled';
 
 const Repositories = () => {
+  const { githubState, getUserRepos, getUserStarred } = useGithub();
+  const [hasUserForSearchrepos, setHasUserForSearchreps] = useState(false);
+
+  useEffect(() => {
+    if (githubState.user.login) {
+      getUserRepos(githubState.user.login);
+      getUserStarred(githubState.user.login);
+    }
+    setHasUserForSearchreps(!!githubState.repositories);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [githubState.user.login]);
+
   return (
-    <S.WrapperTabs
-    selectedTabClassName="is-selected"
-    selectedTabPanelClassName="is-selected"
-    >
-        <S.WrapperTabList>
-          <S.WrapperTab>Repositories</S.WrapperTab>
-          <S.WrapperTab>Starred</S.WrapperTab>
-        </S.WrapperTabList>
-        <S.WrapperTabPanel>
-          <RepositoryItem 
-            name="github-api"
-            linkToRepo="https://github.com/jorgeauri/github-api"
-            fullName="jorgeauri/github-api"
-          />
+    <>
+      {hasUserForSearchrepos ? (
+        <S.WrapperTabs
+          selectedTabClassName="is-selected"
+          selectedTabPanelClassName="is-selected"
+        >
+          <S.WrapperTabList>
+            <S.WrapperTab>Repositories</S.WrapperTab>
+            <S.WrapperTab>Starred</S.WrapperTab>
+          </S.WrapperTabList>
+          <S.WrapperTabPanel>
+            <S.WrapperList>
+              {githubState.repositories.map((item) => (
+                <RepositoryItem
+                  key={item.id}
+                  name={item.name}
+                  linkToRepo={item.full_name}
+                  fullName={item.full_name}
+                />
+              ))}
+            </S.WrapperList>
           </S.WrapperTabPanel>
-        <S.WrapperTabPanel>
-          <RepositoryItem
-          name="helixGame"
-          linkToRepo="https://github.com/jorgeauri/helixGame"
-          fullName="jorgeauri/helixGame"
-          />
+          <S.WrapperTabPanel>
+            <S.WrapperList>
+              {githubState.starred.map((item) => (
+                <RepositoryItem
+                  key={item.id}
+                  name={item.name}
+                  linkToRepo={item.full_name}
+                  fullName={item.full_name}
+                />
+              ))}
+            </S.WrapperList>
           </S.WrapperTabPanel>
-    </S.WrapperTabs>
-    );
+        </S.WrapperTabs>
+      ) : (
+        <></>
+      )}
+    </>
+  );
 };
 
 export default Repositories;
